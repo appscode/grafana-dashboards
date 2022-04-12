@@ -23,7 +23,7 @@
   "gnetId": 9628,
   "graphTooltip": 0,
   "id": 27,
-  "iteration": 1638177476998,
+  "iteration": 1649765789401,
   "links": [],
   "panels": [
     {
@@ -229,43 +229,14 @@
     },
     {
       "datasource": "${datasource}",
-      "description": "Represent database status",
+      "description": "KubeDB Postgres Total Memory Limit",
       "fieldConfig": {
         "defaults": {
           "color": {
+            "fixedColor": "text",
             "mode": "thresholds"
           },
-          "mappings": [
-            {
-              "options": {
-                "Critical": {
-                  "color": "dark-yellow",
-                  "index": 1
-                },
-                "DataRestoring": {
-                  "color": "dark-red",
-                  "index": 4
-                },
-                "Halted": {
-                  "color": "dark-red",
-                  "index": 5
-                },
-                "NotReady": {
-                  "color": "dark-red",
-                  "index": 2
-                },
-                "Provisioning": {
-                  "color": "text",
-                  "index": 3
-                },
-                "Ready": {
-                  "color": "semi-dark-green",
-                  "index": 0
-                }
-              },
-              "type": "value"
-            }
-          ],
+          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -274,7 +245,8 @@
                 "value": null
               }
             ]
-          }
+          },
+          "unit": "bytes"
         },
         "overrides": []
       },
@@ -284,7 +256,7 @@
         "x": 12,
         "y": 1
       },
-      "id": 78,
+      "id": 116,
       "options": {
         "colorMode": "none",
         "graphMode": "area",
@@ -294,7 +266,7 @@
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "/^phase$/",
+          "fields": "",
           "values": false
         },
         "text": {},
@@ -304,36 +276,27 @@
       "targets": [
         {
           "exemplar": false,
-          "expr": "kubedb_postgres_status_phase{namespace=\"$namespace\", postgres=\"$db\"} == 1\n",
-          "format": "table",
+          "expr": "kubedb_postgres_resource_limit_memory{namespace=\"$namespace\", postgres=\"$db\"}",
           "instant": true,
           "interval": "",
-          "legendFormat": "{{phase}}",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "Database Status",
+      "title": "Memory Limit",
       "type": "stat"
     },
     {
       "datasource": "${datasource}",
-      "description": "KubeDB Postgres Current SSL Mode",
+      "description": "Intial Storage Request by Postgres Instance when deploying",
       "fieldConfig": {
         "defaults": {
           "color": {
+            "fixedColor": "text",
             "mode": "thresholds"
           },
-          "mappings": [
-            {
-              "options": {
-                "disable": {
-                  "color": "dark-red",
-                  "index": 0
-                }
-              },
-              "type": "value"
-            }
-          ],
+          "mappings": [],
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -342,7 +305,8 @@
                 "value": null
               }
             ]
-          }
+          },
+          "unit": "bytes"
         },
         "overrides": []
       },
@@ -352,7 +316,7 @@
         "x": 16,
         "y": 1
       },
-      "id": 82,
+      "id": 96,
       "options": {
         "colorMode": "none",
         "graphMode": "area",
@@ -362,58 +326,36 @@
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "/^sslMode$/",
+          "fields": "",
           "values": false
         },
         "text": {},
-        "textMode": "value"
+        "textMode": "auto"
       },
       "pluginVersion": "7.5.11",
       "targets": [
         {
           "exemplar": false,
-          "expr": "kubedb_postgres_info{namespace=\"$namespace\", postgres=\"$db\"}",
-          "format": "table",
+          "expr": "kubedb_postgres_resource_request_storage{namespace=\"$namespace\", postgres=\"$db\"}",
           "instant": true,
           "interval": "",
-          "legendFormat": "{{sslMode}}",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "SSL Mode",
+      "title": "Storage Request",
       "type": "stat"
     },
     {
       "datasource": "${datasource}",
-      "description": "KubeDB Postgres Resource terminationPolicy",
+      "description": "Maximum number of concurrent connections of the Postgres instance",
       "fieldConfig": {
         "defaults": {
           "color": {
+            "fixedColor": "text",
             "mode": "thresholds"
           },
-          "mappings": [
-            {
-              "options": {
-                "Delete": {
-                  "color": "yellow",
-                  "index": 1
-                },
-                "DoNotTerminate": {
-                  "color": "green",
-                  "index": 2
-                },
-                "Halt": {
-                  "color": "blue",
-                  "index": 3
-                },
-                "WipeOut": {
-                  "color": "dark-red",
-                  "index": 0
-                }
-              },
-              "type": "value"
-            }
-          ],
+          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -432,7 +374,7 @@
         "x": 20,
         "y": 1
       },
-      "id": 84,
+      "id": 118,
       "options": {
         "colorMode": "none",
         "graphMode": "area",
@@ -442,25 +384,25 @@
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "/^terminationPolicy$/",
+          "fields": "",
           "values": false
         },
         "text": {},
-        "textMode": "value"
+        "textMode": "auto"
       },
       "pluginVersion": "7.5.11",
       "targets": [
         {
           "exemplar": false,
-          "expr": "kubedb_postgres_info{namespace=\"$namespace\", postgres=\"$db\"}",
-          "format": "table",
+          "expr": "avg(pg_settings_max_connections{namespace=\"$namespace\", pod=~\"$db.*\"})",
+          "hide": false,
           "instant": true,
           "interval": "",
-          "legendFormat": "{{terminationPolicy}}",
-          "refId": "A"
+          "legendFormat": "",
+          "refId": "B"
         }
       ],
-      "title": "Termination Policy",
+      "title": "Max Connections",
       "type": "stat"
     },
     {
@@ -642,14 +584,43 @@
     },
     {
       "datasource": "${datasource}",
-      "description": "KubeDB Postgres Total Memory Limit",
+      "description": "Represent database status",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "fixedColor": "text",
             "mode": "thresholds"
           },
-          "mappings": [],
+          "mappings": [
+            {
+              "options": {
+                "Critical": {
+                  "color": "dark-yellow",
+                  "index": 1
+                },
+                "DataRestoring": {
+                  "color": "dark-red",
+                  "index": 4
+                },
+                "Halted": {
+                  "color": "dark-red",
+                  "index": 5
+                },
+                "NotReady": {
+                  "color": "dark-red",
+                  "index": 2
+                },
+                "Provisioning": {
+                  "color": "text",
+                  "index": 3
+                },
+                "Ready": {
+                  "color": "semi-dark-green",
+                  "index": 0
+                }
+              },
+              "type": "value"
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -658,8 +629,7 @@
                 "value": null
               }
             ]
-          },
-          "unit": "bytes"
+          }
         },
         "overrides": []
       },
@@ -669,7 +639,7 @@
         "x": 12,
         "y": 4
       },
-      "id": 116,
+      "id": 78,
       "options": {
         "colorMode": "none",
         "graphMode": "area",
@@ -679,7 +649,7 @@
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "",
+          "fields": "/^phase$/",
           "values": false
         },
         "text": {},
@@ -689,27 +659,36 @@
       "targets": [
         {
           "exemplar": false,
-          "expr": "kubedb_postgres_resource_limit_memory{namespace=\"$namespace\", postgres=\"$db\"}",
+          "expr": "kubedb_postgres_status_phase{namespace=\"$namespace\", postgres=\"$db\"} == 1\n",
+          "format": "table",
           "instant": true,
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "{{phase}}",
           "refId": "A"
         }
       ],
-      "title": "Memory Limit",
+      "title": "Database Status",
       "type": "stat"
     },
     {
       "datasource": "${datasource}",
-      "description": "Intial Storage Request by Postgres Instance when deploying",
+      "description": "KubeDB Postgres Current SSL Mode",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "fixedColor": "text",
             "mode": "thresholds"
           },
-          "mappings": [],
-          "min": 0,
+          "mappings": [
+            {
+              "options": {
+                "disable": {
+                  "color": "dark-red",
+                  "index": 0
+                }
+              },
+              "type": "value"
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -718,8 +697,7 @@
                 "value": null
               }
             ]
-          },
-          "unit": "bytes"
+          }
         },
         "overrides": []
       },
@@ -729,7 +707,7 @@
         "x": 16,
         "y": 4
       },
-      "id": 96,
+      "id": 82,
       "options": {
         "colorMode": "none",
         "graphMode": "area",
@@ -739,36 +717,58 @@
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "",
+          "fields": "/^sslMode$/",
           "values": false
         },
         "text": {},
-        "textMode": "auto"
+        "textMode": "value"
       },
       "pluginVersion": "7.5.11",
       "targets": [
         {
           "exemplar": false,
-          "expr": "kubedb_postgres_resource_request_storage{namespace=\"$namespace\", postgres=\"$db\"}",
+          "expr": "kubedb_postgres_info{namespace=\"$namespace\", postgres=\"$db\"}",
+          "format": "table",
           "instant": true,
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "{{sslMode}}",
           "refId": "A"
         }
       ],
-      "title": "Storage Request",
+      "title": "SSL Mode",
       "type": "stat"
     },
     {
       "datasource": "${datasource}",
-      "description": "Maximum number of concurrent connections of the Postgres instance",
+      "description": "KubeDB Postgres Resource terminationPolicy",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "fixedColor": "text",
             "mode": "thresholds"
           },
-          "mappings": [],
+          "mappings": [
+            {
+              "options": {
+                "Delete": {
+                  "color": "yellow",
+                  "index": 1
+                },
+                "DoNotTerminate": {
+                  "color": "green",
+                  "index": 2
+                },
+                "Halt": {
+                  "color": "blue",
+                  "index": 3
+                },
+                "WipeOut": {
+                  "color": "dark-red",
+                  "index": 0
+                }
+              },
+              "type": "value"
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -787,7 +787,7 @@
         "x": 20,
         "y": 4
       },
-      "id": 118,
+      "id": 84,
       "options": {
         "colorMode": "none",
         "graphMode": "area",
@@ -797,82 +797,62 @@
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "",
+          "fields": "/^terminationPolicy$/",
           "values": false
         },
         "text": {},
-        "textMode": "auto"
+        "textMode": "value"
       },
       "pluginVersion": "7.5.11",
       "targets": [
         {
           "exemplar": false,
-          "expr": "avg(pg_settings_max_connections{namespace=\"$namespace\", pod=~\"$db.*\"})",
-          "hide": false,
+          "expr": "kubedb_postgres_info{namespace=\"$namespace\", postgres=\"$db\"}",
+          "format": "table",
           "instant": true,
           "interval": "",
-          "legendFormat": "",
-          "refId": "B"
+          "legendFormat": "{{terminationPolicy}}",
+          "refId": "A"
         }
       ],
-      "title": "Max Connections",
+      "title": "Termination Policy",
       "type": "stat"
     },
     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
       "datasource": "${datasource}",
       "description": "The current active line shows the current primary pod",
       "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "graph": false,
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
+        "defaults": {},
         "overrides": []
       },
+      "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 9,
         "w": 12,
         "x": 0,
         "y": 7
       },
+      "hiddenSeries": false,
       "id": 102,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
       "options": {
+        "alertThreshold": true,
         "legend": {
           "calcs": [],
           "displayMode": "list",
@@ -885,7 +865,15 @@
           "mode": "single"
         }
       },
-      "pluginVersion": "8.1.2",
+      "percentage": false,
+      "pluginVersion": "7.5.11",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
       "targets": [
         {
           "exemplar": false,
@@ -896,64 +884,82 @@
           "refId": "A"
         }
       ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
       "title": "Primary Pod FailOver Indicator",
-      "type": "graph"
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     },
     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
       "datasource": "${datasource}",
       "description": "Postgres connections information in real time",
       "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "graph": false,
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
+        "defaults": {},
         "overrides": []
       },
+      "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 9,
         "w": 12,
         "x": 12,
         "y": 7
       },
+      "hiddenSeries": false,
       "id": 120,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
       "options": {
+        "alertThreshold": true,
         "legend": {
           "calcs": [],
           "displayMode": "list",
@@ -966,6 +972,15 @@
           "mode": "single"
         }
       },
+      "percentage": false,
+      "pluginVersion": "7.5.11",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
       "targets": [
         {
           "exemplar": false,
@@ -976,26 +991,50 @@
           "refId": "A"
         }
       ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
       "title": "Connnections",
-      "type": "graph"
-    },
-    {
-      "collapsed": false,
-      "datasource": "${datasource}",
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 16
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
       },
-      "id": 138,
-      "panels": [],
-      "title": "CPU Info",
-      "type": "row"
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     },
     {
       "datasource": "${datasource}",
-      "description": "CPU Usage by Postgres pods",
+      "description": "Track the current Primary for Raft",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1006,13 +1045,12 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
+            "fillOpacity": 10,
             "gradientMode": "none",
             "hideFrom": {
               "graph": false,
               "legend": false,
-              "tooltip": false,
-              "viz": false
+              "tooltip": false
             },
             "lineInterpolation": "linear",
             "lineWidth": 1,
@@ -1020,8 +1058,8 @@
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
-            "spanNulls": false
+            "showPoints": "never",
+            "spanNulls": true
           },
           "mappings": [],
           "thresholds": {
@@ -1036,18 +1074,93 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "short"
         },
         "overrides": []
       },
       "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      },
+      "id": 147,
+      "options": {
+        "graph": {},
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltipOptions": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "7.5.11",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "pg_coordinator_current_primary{namespace=\"$namespace\", pod=~\"$db-.\"}",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Raft Primary Tracker",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "datasource": "${datasource}",
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 24
+      },
+      "id": 138,
+      "panels": [],
+      "title": "CPU Info",
+      "type": "row"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "${datasource}",
+      "description": "CPU Usage by Postgres pods",
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 17
+        "y": 25
       },
+      "hiddenSeries": false,
       "id": 98,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
       "options": {
+        "alertThreshold": true,
         "legend": {
           "calcs": [],
           "displayMode": "table",
@@ -1060,6 +1173,15 @@
           "mode": "single"
         }
       },
+      "percentage": false,
+      "pluginVersion": "7.5.11",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
       "targets": [
         {
           "exemplar": false,
@@ -1069,8 +1191,46 @@
           "refId": "A"
         }
       ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
       "title": "CPU Usage",
-      "type": "graph"
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     },
     {
       "datasource": "${datasource}",
@@ -1280,7 +1440,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 27
+        "y": 35
       },
       "id": 122,
       "links": [],
@@ -1365,7 +1525,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 34
+        "y": 42
       },
       "id": 140,
       "panels": [],
@@ -1373,61 +1533,42 @@
       "type": "row"
     },
     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
       "datasource": "${datasource}",
       "description": "Memory Usage by Postgres pods",
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "graph": false,
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
           "unit": "bytes"
         },
         "overrides": []
       },
+      "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 35
+        "y": 43
       },
+      "hiddenSeries": false,
       "id": 100,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
       "options": {
+        "alertThreshold": true,
         "legend": {
           "calcs": [],
           "displayMode": "table",
@@ -1440,6 +1581,15 @@
           "mode": "single"
         }
       },
+      "percentage": false,
+      "pluginVersion": "7.5.11",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
       "targets": [
         {
           "exemplar": false,
@@ -1449,8 +1599,46 @@
           "refId": "A"
         }
       ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
       "title": "Memory Usage",
-      "type": "graph"
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "bytes",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     },
     {
       "datasource": "${datasource}",
@@ -1731,7 +1919,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 45
+        "y": 53
       },
       "id": 124,
       "links": [],
@@ -1849,7 +2037,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 52
+        "y": 60
       },
       "id": 142,
       "panels": [],
@@ -1857,61 +2045,42 @@
       "type": "row"
     },
     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
       "datasource": "${datasource}",
       "description": "Disk usage by Postgres pods",
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "graph": false,
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
           "unit": "bytes"
         },
         "overrides": []
       },
+      "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 53
+        "y": 61
       },
+      "hiddenSeries": false,
       "id": 112,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
       "options": {
+        "alertThreshold": true,
         "legend": {
           "calcs": [],
           "displayMode": "list",
@@ -1924,6 +2093,15 @@
           "mode": "single"
         }
       },
+      "percentage": false,
+      "pluginVersion": "7.5.11",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
       "targets": [
         {
           "exemplar": false,
@@ -1933,108 +2111,84 @@
           "refId": "A"
         }
       ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
       "title": "Disk Usage",
-      "type": "graph"
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "bytes",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     },
     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
       "datasource": "${datasource}",
       "description": "System Disk Usage Information",
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "fixedColor": "purple",
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "graph": false,
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
           "unit": "none"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Available"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "green",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Used"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "yellow",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "System Reserved"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "red",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
+      "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 53
+        "y": 61
       },
+      "hiddenSeries": false,
       "id": 108,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "nullPointMode": "null",
       "options": {
+        "alertThreshold": true,
         "legend": {
           "calcs": [],
           "displayMode": "table",
@@ -2047,7 +2201,15 @@
           "mode": "single"
         }
       },
-      "pluginVersion": "8.1.2",
+      "percentage": false,
+      "pluginVersion": "7.5.11",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
       "targets": [
         {
           "exemplar": false,
@@ -2068,66 +2230,84 @@
           "refId": "B"
         }
       ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
       "title": "Disk R/W Info",
-      "type": "graph"
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "none",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     },
     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
       "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 100,
-            "gradientMode": "none",
-            "hideFrom": {
-              "graph": false,
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 0,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false
-          },
-          "mappings": [],
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
           "unit": "short"
         },
         "overrides": []
       },
+      "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 62
+        "y": 70
       },
+      "hiddenSeries": false,
       "id": 126,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
       "links": [],
+      "nullPointMode": "null",
       "options": {
+        "alertThreshold": true,
         "legend": {
           "calcs": [],
           "displayMode": "list",
@@ -2140,7 +2320,15 @@
           "mode": "single"
         }
       },
-      "pluginVersion": "8.1.2",
+      "percentage": false,
+      "pluginVersion": "7.5.11",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
       "targets": [
         {
           "exemplar": false,
@@ -2154,68 +2342,84 @@
           "step": 10
         }
       ],
+      "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "IOPS(Reads+Writes)",
-      "type": "graph"
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     },
     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
       "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 100,
-            "gradientMode": "none",
-            "hideFrom": {
-              "graph": false,
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 0,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false
-          },
-          "mappings": [],
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
           "unit": "Bps"
         },
         "overrides": []
       },
+      "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 62
+        "y": 70
       },
+      "hiddenSeries": false,
       "id": 128,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
       "links": [],
+      "nullPointMode": "null",
       "options": {
+        "alertThreshold": true,
         "legend": {
           "calcs": [],
           "displayMode": "list",
@@ -2228,7 +2432,15 @@
           "mode": "single"
         }
       },
-      "pluginVersion": "8.1.2",
+      "percentage": false,
+      "pluginVersion": "7.5.11",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
       "targets": [
         {
           "exemplar": false,
@@ -2242,10 +2454,46 @@
           "step": 10
         }
       ],
+      "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "ThroughPut(Read+Write)",
-      "type": "graph"
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "Bps",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     },
     {
       "datasource": "${datasource}",
@@ -2478,7 +2726,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 69
+        "y": 77
       },
       "id": 130,
       "links": [],
@@ -2574,7 +2822,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 76
+        "y": 84
       },
       "id": 144,
       "panels": [],
@@ -2585,46 +2833,6 @@
       "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 100,
-            "gradientMode": "none",
-            "hideFrom": {
-              "graph": false,
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 0,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false
-          },
-          "mappings": [],
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
           "unit": "Bps"
         },
         "overrides": []
@@ -2633,7 +2841,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 77
+        "y": 85
       },
       "id": 132,
       "links": [],
@@ -2650,7 +2858,7 @@
           "mode": "single"
         }
       },
-      "pluginVersion": "8.1.2",
+      "pluginVersion": "7.5.11",
       "targets": [
         {
           "exemplar": false,
@@ -2673,46 +2881,6 @@
       "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 100,
-            "gradientMode": "none",
-            "hideFrom": {
-              "graph": false,
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 0,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false
-          },
-          "mappings": [],
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
           "unit": "Bps"
         },
         "overrides": []
@@ -2721,7 +2889,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 77
+        "y": 85
       },
       "id": 134,
       "links": [],
@@ -2738,7 +2906,7 @@
           "mode": "single"
         }
       },
-      "pluginVersion": "8.1.2",
+      "pluginVersion": "7.5.11",
       "targets": [
         {
           "exemplar": false,
@@ -2806,7 +2974,10 @@
         "multi": false,
         "name": "namespace",
         "options": [],
-        "query": "label_values(namespace)",
+        "query": {
+          "query": "label_values(namespace)",
+          "refId": "Prometheus-namespace-Variable-Query"
+        },
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -2821,8 +2992,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "pg-demo",
-          "value": "pg-demo"
+          "text": "demo-pg",
+          "value": "demo-pg"
         },
         "datasource": "${datasource}",
         "definition": "query_result(kubedb_postgres_created{namespace=\"$namespace\"})",
@@ -2834,7 +3005,10 @@
         "multi": false,
         "name": "db",
         "options": [],
-        "query": "query_result(kubedb_postgres_created{namespace=\"$namespace\"})",
+        "query": {
+          "query": "query_result(kubedb_postgres_created{namespace=\"$namespace\"})",
+          "refId": "Prometheus-db-Variable-Query"
+        },
         "refresh": 1,
         "regex": "/.*postgres=\"([^\"]+).*/",
         "skipUrlSync": false,
@@ -2848,7 +3022,7 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {
@@ -2879,6 +3053,5 @@
   "timezone": "",
   "title": "KubeDB / Postgres / Summary",
   "uid": "VnOgk2Hnk",
-  "version": 2
+  "version": 1
 }
-
