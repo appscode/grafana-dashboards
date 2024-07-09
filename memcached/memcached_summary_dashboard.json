@@ -22,8 +22,8 @@
   "editable": true,
   "gnetId": 9628,
   "graphTooltip": 0,
-  "id": 27,
-  "iteration": 1682776538666,
+  "id": 30,
+  "iteration": 1720525999549,
   "links": [],
   "panels": [
     {
@@ -293,8 +293,8 @@
       "type": "stat"
     },
     {
-      "datasource": "${datasource}",
-      "description": "KubeDB Database Resource DeletionPolicy",
+      "datasource": null,
+      "description": "KubeDB Database Resource deletionPolicy",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2060,566 +2060,13 @@
       }
     },
     {
+      "collapsed": false,
       "datasource": "${datasource}",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": null,
-            "displayMode": "auto",
-            "filterable": false
-          },
-          "decimals": 2,
-          "displayName": "",
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Time"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Time"
-              },
-              {
-                "id": "custom.align",
-                "value": null
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Value #A"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "IOPS(Reads)"
-              },
-              {
-                "id": "unit",
-                "value": "short"
-              },
-              {
-                "id": "decimals",
-                "value": -1
-              },
-              {
-                "id": "custom.align",
-                "value": null
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Value #B"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "IOPS(Writes)"
-              },
-              {
-                "id": "unit",
-                "value": "short"
-              },
-              {
-                "id": "decimals",
-                "value": -1
-              },
-              {
-                "id": "custom.align",
-                "value": null
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Value #C"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "IOPS(Reads + Writes)"
-              },
-              {
-                "id": "unit",
-                "value": "short"
-              },
-              {
-                "id": "decimals",
-                "value": -1
-              },
-              {
-                "id": "custom.align",
-                "value": null
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Value #D"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Throughput(Read)"
-              },
-              {
-                "id": "unit",
-                "value": "Bps"
-              },
-              {
-                "id": "decimals",
-                "value": 2
-              },
-              {
-                "id": "custom.align",
-                "value": null
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Value #E"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Throughput(Write)"
-              },
-              {
-                "id": "unit",
-                "value": "Bps"
-              },
-              {
-                "id": "decimals",
-                "value": 2
-              },
-              {
-                "id": "custom.align",
-                "value": null
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Value #F"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Throughput(Read + Write)"
-              },
-              {
-                "id": "unit",
-                "value": "Bps"
-              },
-              {
-                "id": "decimals",
-                "value": 2
-              },
-              {
-                "id": "custom.align",
-                "value": null
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "pod"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Pod"
-              },
-              {
-                "id": "unit",
-                "value": "short"
-              },
-              {
-                "id": "decimals",
-                "value": 2
-              },
-              {
-                "id": "links",
-                "value": [
-                  {
-                    "targetBlank": false,
-                    "title": "Drill down to pods",
-                    "url": "./d/6581e46e4e5c7ba40a07646395ef7b23/k8s-resources-pod?var-datasource=$datasource&var-cluster=$cluster&var-namespace=$namespace&var-pod=$__cell"
-                  }
-                ]
-              },
-              {
-                "id": "custom.align",
-                "value": null
-              }
-            ]
-          }
-        ]
-      },
       "gridPos": {
-        "h": 7,
+        "h": 1,
         "w": 24,
         "x": 0,
         "y": 51
-      },
-      "id": 130,
-      "links": [],
-      "options": {
-        "showHeader": true
-      },
-      "pluginVersion": "7.5.5",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "sum by(pod) (rate(container_fs_reads_total{container!=\"\", pod=~\"$app-\\\\d+$\",namespace=~\"$namespace\"}[5m]))",
-          "format": "table",
-          "instant": true,
-          "interval": "",
-          "intervalFactor": 2,
-          "legendFormat": "",
-          "refId": "A",
-          "step": 10
-        },
-        {
-          "exemplar": true,
-          "expr": "sum by(pod) (rate(container_fs_writes_total{container!=\"\", pod=~\"$app-\\\\d+$\",namespace=~\"$namespace\"}[5m]))",
-          "format": "table",
-          "instant": true,
-          "interval": "",
-          "intervalFactor": 2,
-          "legendFormat": "",
-          "refId": "B",
-          "step": 10
-        },
-        {
-          "exemplar": true,
-          "expr": "sum by(pod) (rate(container_fs_reads_total{container!=\"\", pod=~\"$app-\\\\d+$\",namespace=~\"$namespace\"}[5m]) + rate(container_fs_writes_total{container!=\"\",pod=~\"$app-\\\\d+$\",namespace=~\"$namespace\"}[5m]))",
-          "format": "table",
-          "instant": true,
-          "interval": "",
-          "intervalFactor": 2,
-          "legendFormat": "",
-          "refId": "C",
-          "step": 10
-        },
-        {
-          "exemplar": true,
-          "expr": "sum by(pod) (rate(container_fs_reads_bytes_total{container!=\"\", pod=~\"$app-\\\\d+$\",namespace=~\"$namespace\"}[5m]))",
-          "format": "table",
-          "instant": true,
-          "interval": "",
-          "intervalFactor": 2,
-          "legendFormat": "",
-          "refId": "D",
-          "step": 10
-        },
-        {
-          "exemplar": true,
-          "expr": "sum by(pod) (rate(container_fs_writes_bytes_total{container!=\"\", pod=~\"$app-\\\\d+$\",namespace=~\"$namespace\"}[5m]))",
-          "format": "table",
-          "instant": true,
-          "interval": "",
-          "intervalFactor": 2,
-          "legendFormat": "",
-          "refId": "E",
-          "step": 10
-        },
-        {
-          "exemplar": true,
-          "expr": "sum by(pod) (rate(container_fs_reads_bytes_total{container!=\"\", pod=~\"$app-\\\\d+$\",namespace=~\"$namespace\"}[5m]) + rate(container_fs_writes_bytes_total{container!=\"\",pod=~\"$app-\\\\d+$\",namespace=~\"$namespace\"}[5m]))",
-          "format": "table",
-          "instant": true,
-          "interval": "",
-          "intervalFactor": 2,
-          "legendFormat": "",
-          "refId": "F",
-          "step": 10
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Current Storage IO",
-      "transformations": [
-        {
-          "id": "merge",
-          "options": {
-            "reducers": []
-          }
-        }
-      ],
-      "type": "table"
-    },
-    {
-      "collapsed": false,
-      "datasource": "${datasource}",
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 58
-      },
-      "id": 152,
-      "panels": [],
-      "title": "Persistent Storage Insight",
-      "type": "row"
-    },
-    {
-      "datasource": "${datasource}",
-      "description": "This panel describes allocated persistent storage in a table format\n",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": "center",
-            "displayMode": "color-text",
-            "filterable": false
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "light-blue",
-                "value": null
-              }
-            ]
-          },
-          "unit": "decbytes"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 0,
-        "y": 59
-      },
-      "id": 148,
-      "options": {
-        "showHeader": true
-      },
-      "pluginVersion": "7.5.5",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "kubelet_volume_stats_capacity_bytes + on(persistentvolumeclaim) group_left(pod) kube_pod_spec_volumes_persistentvolumeclaims_info{pod=~\"^$app.*\",namespace=~\"$namespace\"}",
-          "format": "table",
-          "instant": true,
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Allocated Storage",
-      "transformations": [
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {
-              "Time": true,
-              "endpoint": true,
-              "instance": true,
-              "job": true,
-              "metrics_path": true,
-              "namespace": true,
-              "node": true,
-              "persistentvolumeclaim": true,
-              "service": true
-            },
-            "indexByName": {},
-            "renameByName": {
-              "Value": "Volume",
-              "pod": "Pod"
-            }
-          }
-        }
-      ],
-      "type": "table"
-    },
-    {
-      "datasource": "${datasource}",
-      "description": "This panel shows the persistent volume usage in percentage. ",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "percent"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 12,
-        "y": 59
-      },
-      "id": 146,
-      "options": {
-        "displayMode": "gradient",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showUnfilled": true,
-        "text": {}
-      },
-      "pluginVersion": "7.5.5",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "(kubelet_volume_stats_used_bytes / on(persistentvolumeclaim) group_left(pod) (kubelet_volume_stats_capacity_bytes + on(persistentvolumeclaim) group_left(pod) kube_pod_spec_volumes_persistentvolumeclaims_info{pod=~\"^$app.*\",namespace=~\"$namespace\"}) )* 100",
-          "instant": true,
-          "interval": "",
-          "legendFormat": "{{pod}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Persistent Volume Usage",
-      "transformations": [],
-      "type": "bargauge"
-    },
-    {
-      "datasource": "${datasource}",
-      "description": "This panel describes the persistent volume usage in a time series. ",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "axisSoftMax": 5000,
-            "axisSoftMin": 0,
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "opacity",
-            "hideFrom": {
-              "graph": false,
-              "legend": false,
-              "tooltip": false
-            },
-            "lineInterpolation": "linear",
-            "lineStyle": {
-              "fill": "solid"
-            },
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": true
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "decbytes"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 24,
-        "x": 0,
-        "y": 65
-      },
-      "id": 150,
-      "options": {
-        "graph": {},
-        "legend": {
-          "calcs": [
-            "max",
-            "lastNotNull"
-          ],
-          "displayMode": "table",
-          "placement": "right"
-        },
-        "tooltipOptions": {
-          "mode": "single"
-        }
-      },
-      "pluginVersion": "7.5.5",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "(kubelet_volume_stats_used_bytes + on(persistentvolumeclaim) group_left(pod) kube_pod_spec_volumes_persistentvolumeclaims_info{pod=~\"^$app.*\",namespace=~\"$namespace\"}) ",
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{pod}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Persistent Volume Usage History",
-      "type": "timeseries"
-    },
-    {
-      "collapsed": false,
-      "datasource": "${datasource}",
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 73
       },
       "id": 144,
       "panels": [],
@@ -2642,7 +2089,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 74
+        "y": 52
       },
       "hiddenSeries": false,
       "id": 132,
@@ -2743,7 +2190,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 74
+        "y": 52
       },
       "hiddenSeries": false,
       "id": 134,
@@ -2894,8 +2341,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "memcached-galera",
-          "value": "memcached-galera"
+          "text": "coreos-prom-memcd",
+          "value": "coreos-prom-memcd"
         },
         "datasource": "${datasource}",
         "definition": "label_values(kubedb_com_memcached_status_phase{namespace=~\"$namespace\"},app)",
@@ -2955,5 +2402,5 @@
   "timezone": "",
   "title": "KubeDB / memcached / Summary",
   "uid": "VnOgk2Hnk",
-  "version": 11
+  "version": 3
 }
