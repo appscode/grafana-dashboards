@@ -77,8 +77,13 @@ create_db_dependencies() {
         kubectl wait --for=jsonpath='{.status.phase}'=Ready ConnectCluster connectcluster -n demo --timeout=10m
 
         kubectl apply -f ../samples/kafka/connectcluster/monitoring/file-source.yaml
-        sleep 2s
     fi
+
+    if [ "$folder" == "redis" ]; then
+        kubectl apply -f ../samples/redis/monitoring/sentinel.yaml
+        kubectl wait --for=jsonpath='{.status.phase}'=Ready RedisSentinel sentinel -n demo --timeout=10m
+    fi
+    sleep 2s
 }
 
 cleanup() {
@@ -97,7 +102,7 @@ check_dashboard_for_non_dbs() {
     for file in "${inside_files_array[@]}"; do
       if [[ $file == *.json ]]; then
         dashboard_name="${file::-5}"
-        echo "checking for dashboard  $dashboard_name"
+        echo "checking for dashboard $dashboard_name"
         url="https://raw.githubusercontent.com/appscode/grafana-dashboards/master/$folder/$file"
         echo "$HOME/go/bin/kubectl-dba monitor dashboard -u $url -o=true --prom-svc-name=prometheus-kube-prometheus-prometheus --prom-svc-namespace=monitoring --prom-svc-port=9090"
         $HOME/go/bin/kubectl-dba monitor dashboard -u $url -d=false --prom-svc-name=prometheus-kube-prometheus-prometheus --prom-svc-namespace=monitoring --prom-svc-port=9090
@@ -150,7 +155,7 @@ for folder in "${folder_array[@]}"; do
         $HOME/go/bin/kubectl-dba monitor dashboard $folder $folder -n demo $dashboard_name --prom-svc-name=prometheus-kube-prometheus-prometheus --prom-svc-namespace=monitoring --prom-svc-port=9090 -b=workflow
       fi
     done
-#    cleanup "$path" "$folder"
+    cleanup "$path" "$folder"
 
   elif [ "$folder" == "stash" ]; then
     echo "non db object name: $folder"
